@@ -6,6 +6,6 @@ import { supabase } from '@/lib/supabaseClient'
 
 export async function POST(req: NextRequest) {
   const { id } = await req.json()
-  await supabase.from('notes').delete().eq('id', id)
+  await supabase.from('notes_basic').delete().eq('id', id)
   return NextResponse.json({ success: true })
 }

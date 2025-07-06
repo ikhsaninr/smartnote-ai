@@ -10,6 +10,6 @@ export async function POST(req: NextRequest) {
   const summary = `Updated: ${content.slice(0, 40)}...`
   const embedding = await getEmbedding(content)
 
-  await supabase.from('notes').update({ content, summary, embedding }).eq('id', id)
+  await supabase.from('notes_basic').update({ content, summary, embedding }).eq('id', id)
   return NextResponse.json({ success: true })
 }
