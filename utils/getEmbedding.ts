@@ -1,17 +1,27 @@
-// ============================
-// FILE: utils/getEmbedding.ts
-// ============================
-import OpenAI from 'openai'
+// utils/getEmbedding.ts
+import axios from 'axios'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY!,
-  baseURL: 'https://openrouter.ai/api/v1',
-})
+export async function getEmbedding(text: string): Promise<number[]> {
+  try {
+    const response = await axios.post(
+      'https://openrouter.ai/api/v1/embeddings',
+      {
+        model: 'openai/text-embedding-ada-002',
+        input: text,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://smartnote.vercel.app', // opsional
+          'X-Title': 'SmartNote AI',
+        },
+      }
+    )
 
-export async function getEmbedding(text: string) {
-  const res = await openai.embeddings.create({
-    input: text,
-    model: 'openai/text-embedding-ada-002',
-  })
-  return res.data[0].embedding
+    return response.data.data[0].embedding
+  } catch (error: any) {
+    console.error('Gagal mendapatkan embedding:', error.response?.data || error.message)
+    throw new Error('Embedding gagal dibuat')
+  }
 }
