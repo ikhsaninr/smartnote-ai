@@ -23,7 +23,7 @@ export default function Login() {
   )
 }
 
-<button onClick={async () => {
+/* <button onClick={async () => {
   await supabase.auth.signOut()
   router.push('/login')
-}}>Logout</button>
+}}>Logout</button> */
