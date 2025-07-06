@@ -6,14 +6,17 @@ import { getEmbedding } from '@/utils/getEmbedding'
 import OpenAI from 'openai'
 import { supabase } from '@/lib/supabaseClient'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! })
+const openai = new OpenAI({
+  apiKey: process.env.OPENROUTER_API_KEY!,
+  baseURL: 'https://openrouter.ai/api/v1',
+})
 
 export async function POST(req: NextRequest) {
   const { content } = await req.json()
   const res = await openai.chat.completions.create({
-    model: 'gpt-4o',
-    messages: [{ role: 'user', content: `Ringkas ini: ${content}` }]
-  })
+  model: 'openai/gpt-3.5-turbo',
+  messages: [{ role: 'user', content: `Ringkas ini: ${content}` }],
+})
   const summary = res.choices[0].message.content || ''
   const embedding = await getEmbedding(content)
 
